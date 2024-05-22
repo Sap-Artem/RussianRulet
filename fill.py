@@ -4,8 +4,9 @@ import random
 from aiogram.types import CallbackQuery, FSInputFile
 
 
-async def fill_bullets(bot, querty: CallbackQuery, bullets1, kol_objects1, sum1, play_live1, opponent_live1, kol1):
+async def fill_bullets(bot, querty: CallbackQuery, bullets1, kol_objects1, sum1, play_live1, opponent_live1, kol1, opponent_objects):
     kol_objects1 = kol_objects1 + 2
+    opponent_objects = opponent_objects + 2
     size = random.randint(4, 8)
     sum1 = 0
     for i in range(0, size):
@@ -26,4 +27,4 @@ async def fill_bullets(bot, querty: CallbackQuery, bullets1, kol_objects1, sum1,
     await asyncio.sleep(2)
     await msg.delete()
     print(kol_objects1, sum1, play_live1, opponent_live1, kol1)
-    return bullets1, kol_objects1, sum1, play_live1, opponent_live1, kol1
+    return bullets1, kol_objects1, sum1, play_live1, opponent_live1, kol1, opponent_objects

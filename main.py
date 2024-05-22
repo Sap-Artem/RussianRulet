@@ -25,6 +25,7 @@ kol_objects = 0
 sum = 0
 size = 0
 damage = 1
+opponent_objects = 0
 skotch = False
 duplet = False
 
@@ -43,6 +44,7 @@ async def start_cmd(message: types.Message):
     sum = 0
     size = 0
     damage = 1
+    opponent_objects = 0
     skotch = False
     duplet = False
     photo_input = FSInputFile('./pictures/hello.png', 'rb')
@@ -55,10 +57,10 @@ async def my_callback_foo(querty: CallbackQuery):
         await querty.message.delete()
     except:
         print(querty)
-    global sum, size, kol_objects, bullets, play_live, kol, opponent_live, damage
+    global sum, size, kol_objects, bullets, play_live, kol, opponent_live, damage, opponent_objects
     print(kol_objects, sum, play_live, opponent_live, kol)
     if len(bullets) == 0:
-        bullets, kol_objects, sum, play_live, opponent_live, kol = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol)
+        bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects)
     print(*bullets)
     str_object = ""
     if len(objects) == 0:
@@ -248,25 +250,25 @@ async def my_callback_foo(querty: CallbackQuery):
 @dp.callback_query(MyCallback.filter(F.foo == "kill"))
 async def my_callback_foo(querty: CallbackQuery):
     await querty.message.delete()
-    global bullets, play_live, opponent_live, kol, kol_objects, sum, damage, duplet, skotch, objects
+    global bullets, play_live, opponent_live, kol, kol_objects, sum, damage, duplet, skotch, objects, opponent_objects
     if (duplet) & (len(bullets) > 1):
         g1 = bullets.pop()
         g2 = bullets.pop()
         print("gg что?" + str(g1) + " " + str(g2))
         damage = g1 + g2
         if damage > 0:
-            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects = await killT(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects = await killT(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects)
         else:
-            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects = await killF(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects = await killF(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects)
     else:
         if bullets.pop() == 1:
-            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects = await killT(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects = await killT(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects)
         else:
-            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects = await killF(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects = await killF(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects)
 @dp.callback_query(MyCallback.filter(F.foo == "himself"))
 async def my_callback_foo(querty: CallbackQuery):
     await querty.message.delete()
-    global bullets, play_live, opponent_live, kol, kol_objects, sum, damage
+    global bullets, play_live, opponent_live, kol, kol_objects, sum, damage, opponent_objects
     if bullets.pop() == 1:
         photo_input = FSInputFile('./pictures/shot.png', 'rb')
         msg = await bot.send_photo(querty.message.chat.id, photo_input, caption=f"*Ба-бах* Вы выстрелили в себя")
@@ -285,8 +287,8 @@ async def my_callback_foo(querty: CallbackQuery):
             await asyncio.sleep(1)
             await msg.delete()
             if (len(bullets) == 0):
-                bullets, kol_objects, sum, play_live, opponent_live, kol = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol)
-            bullets, kol_objects, sum, play_live, opponent_live, kol, damage = await intelect(bot, querty, bullets, play_live, opponent_live, kol, kol_objects, sum, damage)
+                bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, damage, opponent_objects = await intelect(bot, querty, bullets, play_live, opponent_live, kol, kol_objects, sum, damage, opponent_objects)
     else:
         photo_input = FSInputFile('./pictures/miss.png', 'rb')
         msg = await bot.send_photo(querty.message.chat.id, photo_input, caption=f"*Щелчок* Ружьё не выстрелило")
@@ -296,7 +298,7 @@ async def my_callback_foo(querty: CallbackQuery):
         await asyncio.sleep(1)
         await msg.delete()
         if len(bullets) == 0:
-            bullets, kol_objects, sum, play_live, opponent_live, kol = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects)
         print(*bullets)
         print(*objects)
         str_object = ""

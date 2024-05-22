@@ -7,7 +7,7 @@ from fill import fill_bullets
 from gameLogic import intelect
 
 
-async def killF(bot, querty: CallbackQuery, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects):
+async def killF(bot, querty: CallbackQuery, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects):
     photo_input = FSInputFile('./pictures/miss.png', 'rb')
     msg = await bot.send_photo(querty.message.chat.id, photo_input, caption=f"*Щелчок* Ружьё не выстрелило")
     await asyncio.sleep(2)
@@ -21,14 +21,14 @@ async def killF(bot, querty: CallbackQuery, bullets, kol_objects, sum, play_live
         await asyncio.sleep(1)
         await msg.delete()
         if len(bullets) == 0:
-            bullets, kol_objects, sum, play_live, opponent_live, kol = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol)
-        bullets, kol_objects, sum, play_live, opponent_live, kol, damage = await intelect(bot, querty, bullets, play_live, opponent_live, kol, kol_objects, sum, damage)
-        return bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects
+            bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects)
+        bullets, kol_objects, sum, play_live, opponent_live, kol, damage, opponent_objects = await intelect(bot, querty, bullets, play_live, opponent_live, kol, kol_objects, sum, damage, opponent_objects)
+        return bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects
     else:
         skotch = False
         print("F-> " + str(skotch))
         if len(bullets) == 0:
-            bullets, kol_objects, sum, play_live, opponent_live, kol = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live,kol)
+            bullets, kol_objects, sum, play_live, opponent_live, kol, opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live,kol, opponent_objects)
         str_object = ""
         if len(objects) == 0:
             str_object = "Отсутствуют"
@@ -38,4 +38,4 @@ async def killF(bot, querty: CallbackQuery, bullets, kol_objects, sum, play_live
             str_object = str_object + objects[len(objects) - 1]
         photo_main = FSInputFile('./pictures/main menu.png', 'rb')
         await bot.send_photo(querty.message.chat.id, photo_main, caption=f"Сейчас твой ход! Оцените свои возможности, чтобы придумать эффективную стратегию" + "\n" + "Ваше здоровье: " + str(play_live) + "\n" + "Здоровье противника: " + str(opponent_live) + "\n" + "Ваши предметы: " + str_object + "\n" + "Вы можете вытащить ещё " + str(kol_objects) + " предметов", reply_markup=main_choice(kol, kol_objects))
-        return bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects
+        return bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, opponent_objects
