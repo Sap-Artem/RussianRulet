@@ -15,7 +15,6 @@ async def fill_bullets(bot, querty: CallbackQuery, bullets1, kol_objects1, sum1,
         sum1 = sum1 + l
     if (sum1 == 0) | (sum1 == size):
         k = random.randint(0, size-1)
-        print(k)
         if sum1 == 0:
             bullets1[k] = 1
             sum1 = sum1 + 1
@@ -26,5 +25,4 @@ async def fill_bullets(bot, querty: CallbackQuery, bullets1, kol_objects1, sum1,
     msg = await bot.send_photo(querty.message.chat.id, photo_input, caption=f'В барабан заряжается ' + str(size - sum1) + ' холостых и ' + str(sum1) + ' заряженных патронов')
     await asyncio.sleep(3)
     await msg.delete()
-    print(kol_objects1, sum1, play_live1, opponent_live1, kol1)
     return bullets1, kol_objects1, sum1, play_live1, opponent_live1, kol1, kol_opponent_objects

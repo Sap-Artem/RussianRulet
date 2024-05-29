@@ -29,15 +29,7 @@ def random_objects(objects):
         objects.append("карточка")
     return baf, objects
 
-#async def opponent_rout(querty, opponent_objects, i, opponent_live):
-    #if (opponent_objects[i] == "бинт") | (opponent_objects[i] == "аптечка") | (opponent_objects[i] == "шаверма") | (opponent_objects[i] == "просроченное лекарство"):
-        #opponent_live, opponent_objects = await hill_objects(querty, opponent_objects, i, opponent_live)
-        #print("opponent_live = " + str(opponent_live))
-        #i = i - 1
-    #return opponent_objects, opponent_live, i
-
 async def hill_objects(querty, opponent_objects, i, opponent_live):
-    print(opponent_objects[i])
     if opponent_objects[i] == "бинт":
         opponent_objects.pop(i)
         opponent_live = opponent_live + 1
@@ -83,7 +75,6 @@ async def hill_objects(querty, opponent_objects, i, opponent_live):
     return opponent_objects, opponent_live, i
 
 async def damage_objects(querty, opponent_objects, i, opponent_live, opponent_damage, damage_lite):
-    print(opponent_objects[i])
     if opponent_objects[i] == "обрез":
         opponent_objects.pop(i)
         opponent_damage = opponent_damage + 1
@@ -102,7 +93,6 @@ async def damage_objects(querty, opponent_objects, i, opponent_live, opponent_da
     return opponent_objects, opponent_live, opponent_damage, i, damage_lite
 
 async def look_objects(querty, bullets, opponent_objects, i, solution_lite):
-    print(opponent_objects[i])
     if opponent_objects[i] == "лупа":
         opponent_objects.pop(i)
         msg = await querty.message.answer(f"Ваш оппонент использовал лупу. Он ехидно улыбается)")
@@ -116,7 +106,6 @@ async def look_objects(querty, bullets, opponent_objects, i, solution_lite):
     return bullets, opponent_objects, i, solution_lite
 
 async def negative_objects(querty, bullets, opponent_objects, i, solution_lite):
-    print(opponent_objects[i])
     if opponent_objects[i] == "пулеворот":
         opponent_objects.pop(i)
         msg = await querty.message.answer(f"Ваш оппонент использовал пулеворот. Он изменил полярность следующей пули")
@@ -131,7 +120,6 @@ async def negative_objects(querty, bullets, opponent_objects, i, solution_lite):
     i = i - 1
     return bullets, opponent_objects, i, solution_lite
 async def one_objects(querty, bullets, opponent_objects, play_live, i):
-    print(opponent_objects[i])
     if opponent_objects[i] == "скотч":
         opponent_objects.pop(i)
         msg = await querty.message.answer(f"Ваш оппонент использовал скотч. Теперь он может сделать 2 выстрела подряд")

@@ -14,7 +14,7 @@ from killTrue import killT
 from killFalse import killF
 from randomObjects import random_objects
 
-bot = Bot(token="6702446643:AAFMyBrlTyFZb4GD0ArTCgTQm-aGqNKH77E")
+bot = Bot(token="не скажу")
 dp = Dispatcher()
 
 bullets = []
@@ -64,10 +64,8 @@ async def my_callback_foo(querty: CallbackQuery):
         photo_input = FSInputFile('./pictures/lose.png', 'rb')
         await bot.send_photo(querty.message.chat.id, photo_input, caption=f"Вы проиграли!")
     else:
-        print(kol_objects, sum, play_live, opponent_live, kol)
         if len(bullets) == 0:
             bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects)
-        print(*bullets)
         str_object = ""
         if len(objects) == 0:
             str_object = "Отсутствуют"
@@ -152,7 +150,6 @@ async def my_callback_foo(querty: CallbackQuery):
     global bullets, play_live, opponent_live, kol, kol_objects, sum, damage, objects
     damage = damage + 1
     kol = kol - 1
-    print("!damage=" + str(damage))
     objects.remove("обрез")
     await querty.message.answer(f"Вы использовали обрез. Урон следующего выстрела увеличен на единицу:", reply_markup=continuation())
 @dp.callback_query(MyCallback.filter(F.foo == "клещи"))
@@ -263,7 +260,6 @@ async def my_callback_foo(querty: CallbackQuery):
     if (duplet) & (len(bullets) > 1):
         g1 = bullets.pop()
         g2 = bullets.pop()
-        print("gg что?" + str(g1) + " " + str(g2))
         damage = g1 + g2
         if damage > 0:
             bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, kol_opponent_objects, opponent_objects = await killT(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, damage, skotch, objects, kol_opponent_objects, opponent_objects)
@@ -308,8 +304,6 @@ async def my_callback_foo(querty: CallbackQuery):
         await msg.delete()
         if len(bullets) == 0:
             bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects)
-        print(*bullets)
-        print(*objects)
         str_object = ""
         if len(objects) == 0:
             str_object = "Отсутствуют"
@@ -317,7 +311,6 @@ async def my_callback_foo(querty: CallbackQuery):
             for i in range(0, len(objects) - 1):
                 str_object = str_object + objects[i] + ", "
             str_object = str_object + objects[len(objects) - 1]
-            print(str_object)
         photo_input = FSInputFile('./pictures/main menu.png', 'rb')
         await bot.send_photo(querty.message.chat.id, photo_input, caption=f"Сейчас твой ход! Оцените свои возможности, чтобы придумать эффективную стратегию" + "\n" + "Ваше здоровье: " + str(play_live) + "\n" + "Здоровье противника: " + str(opponent_live) + "\n" + "Ваши предметы: " + str_object + "\n" + "Вы можете вытащить ещё " + str(kol_objects) + " предметов", reply_markup=main_choice(kol, kol_objects))
 async def main():

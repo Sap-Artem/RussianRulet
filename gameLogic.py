@@ -8,7 +8,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from fill import fill_bullets
 from randomObjects import random_objects, hill_objects, damage_objects, look_objects, negative_objects, one_objects
 
-
 async def opponent_solution(querty, bullets, opponent_objects, opponent_live, opponent_damage, play_live, sum, solution_lite, finish):
     if (len(bullets) == sum) | (solution_lite == 1):
         solution = 1
@@ -30,15 +29,12 @@ async def opponent_solution(querty, bullets, opponent_objects, opponent_live, op
         solution = 0
     else:
         if (sum == 1) & (len(bullets) == 2):
-            print("1+1")
             for i in range(0, len(opponent_objects)):
                 bullets, opponent_objects, play_live, i, finish = await one_objects(querty, bullets, opponent_objects, play_live, i)
                 if finish == 1:
                     return 1, bullets, opponent_objects, opponent_live, opponent_damage, play_live, sum, finish
-        print("что?")
         for i in range(0, len(opponent_objects)):
             bullets, opponent_objects, i, solution_lite = await look_objects(querty, bullets, opponent_objects, i, solution_lite)
-            print("opponent_damage = " + str(opponent_damage))
             if solution_lite != -1:
                 break
         if solution_lite == 1:
@@ -53,8 +49,6 @@ async def opponent_solution(querty, bullets, opponent_objects, opponent_live, op
     return solution, bullets, opponent_objects, opponent_live, opponent_damage, play_live, sum, finish
 
 async def intelect(bot, querty: CallbackQuery, bullets, play_live, opponent_live, kol, kol_objects, sum, damage, kol_opponent_objects, opponent_objects):
-    print("интеллект |")
-    print(sum, len(bullets))
     opponent_damage = 1
     finish = 0
     if kol_opponent_objects > 0:
@@ -64,14 +58,11 @@ async def intelect(bot, querty: CallbackQuery, bullets, play_live, opponent_live
         baf1, opponent_objects = random_objects(opponent_objects)
         baf2, opponent_objects = random_objects(opponent_objects)
         #opponent_objects.append("скотч")
-        print(*opponent_objects)
         if opponent_live < 4:
             j = 0
             while j < len(opponent_objects):
-                print("i= " + str(j))
                 opponent_objects, opponent_live, j = await hill_objects(querty, opponent_objects, j, opponent_live)
                 j = j + 1
-                print("!i= " + str(j))
         kol_opponent_objects -= 2
     solution, bullets, opponent_objects, opponent_live, opponent_damage, play_live, sum, finish = await opponent_solution(querty, bullets, opponent_objects, opponent_live, opponent_damage, play_live, sum, -1, 0)
     if finish == 1:
@@ -114,12 +105,10 @@ async def intelect(bot, querty: CallbackQuery, bullets, play_live, opponent_live
             msg = await querty.message.answer(f"Соперник продолжает ход")
             await asyncio.sleep(1)
             await msg.delete()
-            print("bullets: = " + str(bullets))
             if len(bullets) == 0:
                 bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects = await fill_bullets(bot, querty, bullets, kol_objects, sum, play_live, opponent_live, kol, kol_opponent_objects)
             return await intelect(bot, querty, bullets, play_live, opponent_live, kol, kol_objects, sum, damage, kol_opponent_objects, opponent_objects)
     else:
-        print("opponent_damage: " + str(opponent_damage))
         msg = await querty.message.answer(f"Ваш оппонент направляет ружьё на вас")
         await asyncio.sleep(2)
         await msg.delete()
@@ -156,7 +145,6 @@ async def intelect(bot, querty: CallbackQuery, bullets, play_live, opponent_live
             photo_input = FSInputFile('./pictures/continue.png', 'rb')
             await bot.send_photo(querty.message.chat.id, photo_input, caption=f"Ход переходит вам", reply_markup=continuation())
             return bullets, kol_objects, sum, play_live, opponent_live, kol, damage, kol_opponent_objects, opponent_objects
-
 
 def continuation():
     builder = InlineKeyboardBuilder()
